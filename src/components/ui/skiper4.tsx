@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { GripHorizontal, RefreshCcw } from "lucide-react";
 import React, { useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 const Skiper4 = () => {
   const [scale, setScale] = useState(0);

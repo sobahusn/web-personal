@@ -8,7 +8,15 @@ export interface Project {
   github?: string;
   image?: string;
   featured?: boolean;
-  category: "AI Engineer" | "FrontEnd" | "BackEnd" | "Archive";
+  category?:
+    | "AI Engineer"
+    | "FrontEnd"
+    | "BackEnd"
+    | "Archive"
+    | "DevOps"
+    | "Data Science"
+    | "Machine Learning"
+    | "Other";
 }
 
 export interface Article {

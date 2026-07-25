@@ -1,11 +1,15 @@
 import { motion } from "motion/react";
-import { Calendar, Tag, ChevronRight, BookOpen, ArrowLeft, Clock } from "lucide-react";
+import {
+  Calendar,
+  ChevronRight,
+  BookOpen,
+  ArrowLeft,
+  Clock,
+} from "lucide-react";
 import { ARTICLES } from "../constants/constants";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export function ArticlesPage() {
-  const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const article = ARTICLES.find((a) => a.id === selectedId);
 
@@ -13,7 +17,10 @@ export function ArticlesPage() {
     return (
       <div className="pt-[68px]">
         <div className="max-w-3xl mx-auto px-6 md:px-12 py-16">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
             <button
               onClick={() => setSelectedId(null)}
               className="flex items-center gap-2 text-muted hover:text-theme text-sm font-medium mb-10 transition-colors"
@@ -60,8 +67,15 @@ export function ArticlesPage() {
     <div className="pt-[68px]">
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-          <div className="section-divider" style={{ backgroundColor: "#8b5cf6" }} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12"
+        >
+          <div
+            className="section-divider"
+            style={{ backgroundColor: "#8b5cf6" }}
+          />
           <h1 className="text-4xl md:text-5xl font-bold text-theme mb-3 flex items-center gap-3">
             <BookOpen size={32} className="text-purple-500" />
             Articles
@@ -102,8 +116,7 @@ export function ArticlesPage() {
 
               <div className="flex items-center justify-between pt-4 border-t border-theme">
                 <span className="flex items-center gap-1.5 text-xs text-muted">
-                  <Clock size={12} />
-                  5 min read
+                  <Clock size={12} />5 min read
                 </span>
                 <span className="flex items-center gap-1 text-purple-500 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                   Read More <ChevronRight size={14} />
