@@ -41,18 +41,16 @@ export function Navbar() {
 
   return (
     <>
-      <header 
+      <header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          scrolled ? "nav-glass border-b-2 border-theme" : "bg-transparent border-b-2 border-transparent"
+          scrolled
+            ? "nav-glass border-b-2 border-theme"
+            : "bg-transparent border-b-2 border-transparent"
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between h-20 md:h-24">
-          
           {/* Brutalist Brand */}
-          <Link
-            to="/"
-            className="flex flex-col justify-center group"
-          >
+          <Link to="/" className="flex flex-col justify-center group">
             <span className="text-xl md:text-3xl font-black tracking-tighter text-theme group-hover:text-accent transition-colors leading-none">
               SOBAHUSN.
             </span>
@@ -75,7 +73,7 @@ export function Navbar() {
               >
                 {link.label}
                 {/* Brutalist Underline Hover */}
-                <div 
+                <div
                   className={`absolute -bottom-2 left-0 h-1 bg-accent transition-all duration-300 ${
                     isActive(link.to) ? "w-full" : "w-0 group-hover:w-full"
                   }`}
@@ -135,13 +133,22 @@ export function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)" }}
-            animate={{ opacity: 1, clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
-            exit={{ opacity: 0, clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)" }}
+            initial={{
+              opacity: 0,
+              clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
+            }}
+            animate={{
+              opacity: 1,
+              clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+            }}
+            exit={{
+              opacity: 0,
+              clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+            }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 bg-bg flex flex-col pt-32 px-6 pb-12 lg:hidden"
+            className="fixed inset-0 z-40 bg-bg flex flex-col pt-32 px-6 pb-12 lg:hidden bg-accent"
           >
-            <nav className="flex flex-col gap-6 flex-1">
+            <nav className="flex flex-col gap-6 flex-1 ">
               {NAV_LINKS.map((link, i) => (
                 <motion.div
                   key={link.to}
@@ -153,8 +160,8 @@ export function Navbar() {
                     to={link.to}
                     className={`text-5xl sm:text-7xl font-black uppercase tracking-tighter block border-b-2 border-theme pb-4 ${
                       isActive(link.to)
-                        ? "text-accent"
-                        : "text-theme hover:text-accent"
+                        ? "text-accent dark:text-white hover:text-accent"
+                        : "text-theme/20 hover:text-accent dark:text-white/50 hover:dark:text-accent"
                     } transition-colors`}
                   >
                     {link.label}
@@ -169,12 +176,12 @@ export function Navbar() {
               transition={{ delay: 0.6 }}
               className="text-xs font-mono font-bold uppercase tracking-widest text-muted flex justify-between items-end"
             >
-              <div>
-                STATUS: ONLINE <br/>
+              <div className="dark:text-white ">
+                STATUS: ONLINE <br />
                 LOC: SIDOARJO, ID
               </div>
-              <div className="text-right">
-                © {new Date().getFullYear()} <br/>
+              <div className="text-right text-black dark:text-white">
+                © {new Date().getFullYear()} <br />
                 SOBAHUSN
               </div>
             </motion.div>
