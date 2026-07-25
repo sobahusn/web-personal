@@ -5,8 +5,16 @@ import { IconBrandGithub } from "@tabler/icons-react";
 import type { Project } from "../../types/types";
 import { categoryColor, getProjectIcon } from "../../utils/projectUtils";
 
-export function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const colors = categoryColor[project.category] || categoryColor["Archive"];
+export function ProjectCard({
+  project,
+  index,
+}: {
+  project: Project;
+  index: number;
+}) {
+  const colors =
+    (project.category && categoryColor[project.category]) ||
+    categoryColor["Archive"];
   const isArchive = project.category === "Archive";
 
   return (
@@ -34,13 +42,15 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
       >
         {/* Image */}
         {project.image && (
-          <div className={`relative overflow-hidden h-44 ${isArchive ? "grayscale group-hover:grayscale-0 transition-all" : ""}`}>
+          <div
+            className={`relative overflow-hidden h-44 ${isArchive ? "grayscale group-hover:grayscale-0 transition-all" : ""}`}
+          >
             <img
               src={project.image}
               alt={project.title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
             {project.featured && (
               <span
                 className="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
@@ -81,7 +91,8 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
                 key={tag}
                 className="text-[11px] px-2.5 py-1 rounded-full font-mono"
                 style={{
-                  backgroundColor: "color-mix(in srgb, var(--accent) 8%, var(--bg))",
+                  backgroundColor:
+                    "color-mix(in srgb, var(--accent) 8%, var(--bg))",
                   color: "var(--text-muted)",
                 }}
               >
