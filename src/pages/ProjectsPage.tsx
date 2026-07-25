@@ -25,7 +25,9 @@ function ProjectDetail({ id }: { id: string }) {
     );
   }
 
-  const colors = categoryColor[project.category];
+  const colors =
+    (project.category && categoryColor[project.category]) ||
+    categoryColor["Archive"];
 
   return (
     <motion.div
