@@ -1,0 +1,6 @@
+{
+  "name": "personal website",
+  "description": "A developer portfolio with a VS Code-inspired IDE interface, featuring project highlights, timelines, and dark/light mode.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

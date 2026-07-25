@@ -1,0 +1,315 @@
+@import "tailwindcss";
+/* @import "@fontsource/inter";
+@import "@fontsource/jetbrains-mono";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+} */
+
+@layer base {
+  :root {
+    --bg: #f2efe9;
+    --text: #252627;
+    --text-muted: #8e8e93;
+    --border: #d8d5cf;
+    --card-bg: #e8e5de;
+    --card-hover: #e1ded7;
+    --accent: #e8622a;
+    --accent-amber: #f59e0b;
+    --sketch-color: rgba(142, 142, 147, 0.38);
+    --terminal-bg: #080808;
+    --nav-bg: rgba(242, 239, 233, 0.88);
+    --shadow: rgba(37, 38, 39, 0.08);
+    --shadow-lg: rgba(37, 38, 39, 0.15);
+  }
+
+  .dark {
+    --bg: #252627;
+    --text: #f2efe9;
+    --text-muted: #aeaeb2;
+    --border: #3d3e40;
+    --card-bg: #2f3031;
+    --card-hover: #363738;
+    --accent: #f59e0b;
+    --accent-amber: #e8622a;
+    --sketch-color: rgba(174, 174, 178, 0.22);
+    --terminal-bg: #000000;
+    --nav-bg: rgba(37, 38, 39, 0.9);
+    --shadow: rgba(0, 0, 0, 0.2);
+    --shadow-lg: rgba(0, 0, 0, 0.4);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--bg);
+    color: var(--text);
+    transition:
+      background-color 0.35s ease,
+      color 0.35s ease;
+    line-height: 1.6;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--accent) 22%, transparent);
+    color: var(--text);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+/* ─── Design System Utilities ─────────────────────────────────── */
+
+@utility bg-theme {
+  background-color: var(--bg);
+}
+
+@utility text-theme {
+  color: var(--text);
+}
+
+@utility text-muted {
+  color: var(--text-muted);
+}
+
+@utility border-theme {
+  border-color: var(--border);
+}
+
+@utility bg-card {
+  background-color: var(--card-bg);
+}
+
+@utility bg-card-hover {
+  background-color: var(--card-hover);
+}
+
+@utility text-accent {
+  color: var(--accent);
+}
+
+@utility bg-accent {
+  background-color: var(--accent);
+}
+
+@utility text-accent-amber {
+  color: var(--accent-amber);
+}
+
+@utility bg-accent-amber {
+  background-color: var(--accent-amber);
+}
+
+@utility border-accent {
+  border-color: var(--accent);
+}
+
+@utility nav-glass {
+  background-color: var(--nav-bg);
+  backdrop-filter: blur(14px) saturate(1.5);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+}
+
+@utility shadow-theme {
+  box-shadow: 0 4px 24px var(--shadow);
+}
+
+@utility shadow-theme-lg {
+  box-shadow: 0 8px 48px var(--shadow-lg);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Sketch Float Animations ──────────────────────────────────── */
+
+@keyframes sketch-float-a {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(4deg);
+    opacity: 0.75;
+  }
+}
+
+@keyframes sketch-float-b {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: translateY(-25px) rotate(-5deg);
+    opacity: 0.65;
+  }
+}
+
+@keyframes sketch-float-c {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.5;
+  }
+
+  33% {
+    transform: translateY(-15px) rotate(6deg);
+    opacity: 0.7;
+  }
+
+  66% {
+    transform: translateY(-8px) rotate(-3deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes sketch-drift {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(14px, -22px) rotate(7deg);
+  }
+
+  50% {
+    transform: translate(4px, -38px) rotate(-4deg);
+  }
+
+  75% {
+    transform: translate(-12px, -24px) rotate(8deg);
+  }
+
+  100% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+}
+
+@keyframes sketch-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sketch-float-a {
+  animation: sketch-float-a 6s ease-in-out infinite;
+}
+
+.sketch-float-b {
+  animation: sketch-float-b 8.5s ease-in-out infinite;
+}
+
+.sketch-float-c {
+  animation: sketch-float-c 7.2s ease-in-out infinite;
+}
+
+.sketch-drift {
+  animation: sketch-drift 14s ease-in-out infinite;
+}
+
+.sketch-spin-slow {
+  animation: sketch-spin-slow 20s linear infinite;
+}
+
+/* ─── Terminal Animations ───────────────────────────────────────── */
+
+@keyframes cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes line-appear {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cursor-blink {
+  animation: cursor-blink 1.1s step-end infinite;
+}
+
+.line-appear {
+  animation: line-appear 0.35s ease forwards;
+}
+
+/* ─── Fade-in animation ─────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.7s ease forwards;
+}
+
+/* ─── Gradient text ─────────────────────────────────────────────── */
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent), var(--accent-amber));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── Section divider ───────────────────────────────────────────── */
+
+.section-divider {
+  width: 48px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 99px;
+  margin-bottom: 1rem;
+}
