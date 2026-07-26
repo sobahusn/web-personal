@@ -106,7 +106,7 @@ export const PROJECTS: Project[] = [
     image: "/images/cc_florai.webp",
     featured: true,
     category: "Coding Camp 2025",
-    github: "https://github.com/",
+    github: "https://github.com/sobahusn/Flower-Classification-Website",
     special: "Top 15 Best Capstone Project",
   },
 ];
