@@ -25,8 +25,8 @@ export function StatsBar() {
             <div className="absolute top-0 left-0 w-full h-1 bg-accent transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
 
             {/* Massive Content */}
-            <div className="mt-12">
-              <div className="text-6xl md:text-7xl lg:text-[6rem] font-black text-theme leading-none tracking-tighter mb-4 group-hover:scale-105 origin-left transition-transform duration-500">
+            <div className="mt-8 ">
+              <div className="font-striper text-6xl md:text-7xl lg:text-8xl font-black text-theme leading-none tracking-tighter mb-4 group-hover:scale-105 origin-left transition-transform duration-500">
                 {s.value}
               </div>
               <div className="text-sm md:text-base font-bold uppercase tracking-widest text-muted group-hover:text-accent transition-colors duration-300">

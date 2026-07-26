@@ -4,19 +4,13 @@ export interface Project {
   description: string;
   longDescription?: string;
   tags: string[];
+  special?: string;
   link?: string;
   github?: string;
   image?: string;
   featured?: boolean;
-  category?:
-    | "AI Engineer"
-    | "FrontEnd"
-    | "BackEnd"
-    | "Archive"
-    | "DevOps"
-    | "Data Science"
-    | "Machine Learning"
-    | "Other";
+  category?: string;
+  date?: string;
 }
 
 export interface Article {
@@ -46,6 +40,8 @@ export interface Certification {
   link?: string;
   description?: string;
   verificationUrl?: string;
+  skills?: string[];
+  featured?: boolean;
 }
 
 export type ViewType =

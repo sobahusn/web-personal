@@ -38,7 +38,7 @@ export function HeroSection() {
                 delay: i * 0.1,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="text-7xl sm:text-8xl md:text-[10rem] lg:text-[12rem] font-black text-theme leading-none tracking-tighter"
+              className="text-7xl sm:text-8xl md:text-[10rem] lg:text-[12rem] font-black text-theme leading-none tracking-tighter font-outfit"
             >
               {letter}
             </motion.span>
@@ -58,7 +58,13 @@ export function HeroSection() {
           className="bg-card/80 backdrop-blur-md border border-theme p-8 md:p-10 rounded-3xl max-w-2xl text-center shadow-theme-lg relative cursor-default"
         >
           <p className="text-lg md:text-xl text-muted font-medium leading-relaxed mb-8 pointer-events-none">
-            <span className="text-accent font-semibold pointer-events-none">AI Engineer Enthusiast</span> | Undergraduate Informatics Student at Universitas Muhammadiyah Sidoarjo | <span className="text-theme">Network Engineer</span> | <span className="text-theme">Web Developer</span> | Mobile Developer Enthusiast | Cyber Security Enthusiast
+            <span className="text-accent font-semibold pointer-events-none">
+              AI Engineer Enthusiast
+            </span>{" "}
+            | Undergraduate Informatics Student at Universitas Muhammadiyah
+            Sidoarjo | <span className="text-theme">Network Engineer</span> |{" "}
+            <span className="text-theme">Web Developer</span> | Mobile Developer
+            Enthusiast | Cyber Security Enthusiast
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">

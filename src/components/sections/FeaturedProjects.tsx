@@ -13,10 +13,7 @@ export function FeaturedProjects() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
           <div className="max-w-2xl">
             <h2 className="text-5xl md:text-7xl font-black text-theme uppercase tracking-tighter leading-none mb-6">
-              Selected <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-accent to-accent-amber">
-                Works.
-              </span>
+              Selected Works
             </h2>
             <p className="text-muted text-lg font-medium">
               A curated collection of projects highlighting my expertise in
@@ -26,9 +23,9 @@ export function FeaturedProjects() {
           </div>
           <Link
             to="/projects"
-            className="flex items-center gap-3 px-6 py-3 rounded-full border border-theme text-theme font-bold uppercase tracking-widest text-xs hover:bg-theme hover:text-accent transition-all group shrink-0"
+            className="flex items-center justify-between gap-3 px-6 py-3 rounded-full border border-theme text-theme font-bold uppercase tracking-widest text-xs hover:bg-theme hover:text-accent transition-all group shrink-0"
           >
-            View All Archive
+            View All Projects
             <ArrowRight
               size={16}
               className="group-hover:translate-x-1 transition-transform"
@@ -48,20 +45,24 @@ export function FeaturedProjects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8 }}
-                className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} gap-12 lg:gap-20 items-center group`}
+                className={`flex flex-col  ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} gap-12 lg:gap-20 items-center group`}
               >
                 {/* Image Side */}
-                <div className="w-full lg:w-1/2 relative">
+                <div className="w-full lg:w-1/2 relative aspect-video">
                   <Link
                     to={`/projects/${project.id}`}
-                    className="block relative rounded-3xl overflow-hidden aspect-square shadow-theme-lg border border-theme/50 bg-card"
+                    className="block relative rounded-3xl overflow-hidden shadow-theme-lg border border-theme bg-card"
                   >
-                    {project.image && (
+                    {project.image ? (
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-[0.16,1,0.3,1]"
+                        className="w-full h-full object-cover lg:grayscale lg:opacity-70 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-[0.16,1,0.3,1]"
                       />
+                    ) : (
+                      <div className="w-full h-full bg-muted flex items-center justify-center p-8">
+                        <span className="text-muted">Image not available</span>
+                      </div>
                     )}
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-accent/20 opacity-0 group-hover:opacity-100 mix-blend-overlay transition-opacity duration-500" />
@@ -77,11 +78,7 @@ export function FeaturedProjects() {
 
                 {/* Content Side */}
                 <div className="w-full lg:w-1/2 flex flex-col justify-center">
-                  <div className="flex items-center gap-4 mb-6">
-                    <span className="text-sm font-black text-muted tracking-[0.2em] uppercase">
-                      0{i + 1}
-                    </span>
-                    <div className="h-px bg-theme flex-1" />
+                  <div className="flex items-center gap-4 mb-6 justify-between">
                     <span className="text-xs font-bold px-3 py-1 rounded-full border border-theme text-accent tracking-widest uppercase">
                       {project.category}
                     </span>
@@ -99,12 +96,12 @@ export function FeaturedProjects() {
 
                   <div className="flex flex-wrap gap-2 mb-10">
                     {project.tags.slice(0, 4).map((tag) => (
-                      <span
+                      <div
                         key={tag}
                         className="text-xs px-4 py-2 rounded-full font-mono bg-card border border-theme text-muted hover:text-theme transition-colors cursor-default"
                       >
                         {tag}
-                      </span>
+                      </div>
                     ))}
                   </div>
 

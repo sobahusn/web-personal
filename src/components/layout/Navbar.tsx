@@ -5,10 +5,10 @@ import { useTheme } from "../../context/ThemeContext";
 import { motion, AnimatePresence } from "motion/react";
 
 const NAV_LINKS = [
-  { label: "INDEX", to: "/" },
+  { label: "Home", to: "/" },
   { label: "PROJECTS", to: "/projects" },
   { label: "CERTIFICATES", to: "/certificate" },
-  { label: "ARCHIVE", to: "/about" },
+  { label: "ABOUT", to: "/about" },
 ];
 
 export function Navbar() {
@@ -48,14 +48,11 @@ export function Navbar() {
             : "bg-transparent border-b-2 border-transparent"
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between h-20 md:h-24">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20 md:h-24">
           {/* Brutalist Brand */}
           <Link to="/" className="flex flex-col justify-center group">
-            <span className="text-xl md:text-3xl font-black tracking-tighter text-theme group-hover:text-accent transition-colors leading-none">
-              SOBAHUSN.
-            </span>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-[0.3em] text-muted group-hover:text-theme transition-colors mt-1">
-              Software System
+            <span className="font-striper text-xl md:text-3xl font-black tracking-tighter text-theme group-hover:text-accent transition-colors leading-none">
+              SOBAHUSN
             </span>
           </Link>
 
