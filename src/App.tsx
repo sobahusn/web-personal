@@ -6,10 +6,12 @@ import { AboutPage } from "./pages/AboutPage";
 import { ProjectsPage, ProjectDetailPage } from "./pages/ProjectsPage";
 import { CertificationsPage } from "./pages/CertificationsPage";
 import { ArticlesPage } from "./pages/ArticlesPage";
+import { ScrollOnTop } from "./components/ScrollOnTop";
 
 function AppRoutes() {
   return (
     <Layout>
+      <ScrollOnTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -20,7 +22,10 @@ function AppRoutes() {
 
         {/* Redirect old paths for backwards compat */}
         <Route path="/profile" element={<Navigate to="/about" replace />} />
-        <Route path="/certifications" element={<Navigate to="/certificate" replace />} />
+        <Route
+          path="/certifications"
+          element={<Navigate to="/certificate" replace />}
+        />
         <Route path="/timeline" element={<Navigate to="/about" replace />} />
         <Route path="/contact" element={<Navigate to="/about" replace />} />
 

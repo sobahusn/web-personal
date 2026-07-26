@@ -12,9 +12,28 @@ export function AboutPage() {
     return yearB - yearA;
   };
 
-  const experience = TIMELINE.filter(t => t.type === "experience").sort(sortByYear);
-  const education = TIMELINE.filter(t => t.type === "education").sort(sortByYear);
-  const bootcamps = TIMELINE.filter(t => t.type === "bootcamp").sort(sortByYear);
+  const experience = TIMELINE.filter((t) => t.type === "experience").sort(
+    sortByYear,
+  );
+  const education = TIMELINE.filter((t) => t.type === "education").sort(
+    sortByYear,
+  );
+  const bootcamps = TIMELINE.filter((t) => t.type === "bootcamp").sort(
+    sortByYear,
+  );
+
+  const technologies = [
+    "Linux",
+    "Docker",
+    "Node.js",
+    "JavaScript",
+    "React",
+    "TypeScript",
+    "Next.js",
+    "Python",
+    "FastAPI",
+    "Go",
+  ];
 
   const renderLedger = (title: string, items: TimelineItem[]) => (
     <div className="mb-24">
@@ -26,7 +45,7 @@ export function AboutPage() {
       </div>
       <div className="flex flex-col border-t-2 border-theme">
         {items.map((item, i) => (
-          <motion.div 
+          <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -38,14 +57,14 @@ export function AboutPage() {
             <div className="w-full md:w-48 shrink-0 text-sm md:text-lg font-bold font-mono text-muted group-hover:text-theme transition-colors">
               {item.date}
             </div>
-            
+
             {/* Title & Organization */}
             <div className="flex-1">
               <h3 className="text-xl md:text-2xl font-black text-theme group-hover:text-accent transition-colors duration-300 mb-1">
                 {item.title}
               </h3>
               <div className="text-sm font-bold text-muted uppercase tracking-wider">
-                {item.organization} {item.location && `// ${item.location}`}
+                {item.organization} {item.location && `| ${item.location}`}
               </div>
             </div>
 
@@ -61,13 +80,11 @@ export function AboutPage() {
 
   return (
     <div className="pt-24 md:pt-32 bg-theme overflow-hidden">
-      
       {/* ── PROFILE HERO: Brutalist Split ── */}
       <section className="max-w-7xl mx-auto px-6 md:px-12 mb-32">
         <div className="flex flex-col lg:flex-row items-end gap-12 lg:gap-20">
-          
           {/* Avatar side */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
@@ -77,17 +94,21 @@ export function AboutPage() {
             <img
               src="https://github.com/sobahusn.png"
               alt="Ni'am Portrait"
-              className="w-full aspect-[4/5] object-cover grayscale group-hover:grayscale-0 transition-all duration-700 shadow-theme-lg"
+              className="w-full aspect-square object-cover grayscale-60 group-hover:grayscale-0 transition-all duration-700 shadow-theme-lg"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute bottom-4 left-4 right-4 bg-bg/80 backdrop-blur-md border border-theme p-4 flex items-center justify-between">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-theme">SYSTEM STATUS</span>
+            <div className="absolute bottom-4 left-4 right-4 bg-bg/80 backdrop-blur-md border border-black/20 p-4 flex items-center justify-between ">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-theme">
+                Status
+              </span>
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                 </span>
-                <span className="font-mono text-xs text-accent">ONLINE</span>
+                <span className="font-outift text-xs font-bold uppercase tracking-[0.2em] text-green-500">
+                  Open to work
+                </span>
               </div>
             </div>
           </motion.div>
@@ -95,18 +116,32 @@ export function AboutPage() {
           {/* Text side */}
           <div className="w-full lg:w-7/12 flex flex-col justify-end">
             <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-black text-theme leading-[0.8] tracking-tighter mb-8 uppercase">
-              ABOUT <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-amber">NI'AM.</span>
+              ABOUT <br />
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-accent to-accent-amber">
+                NI'AM.
+              </span>
             </h1>
-            
+
             <div className="w-16 h-1.5 bg-accent mb-8" />
-            
+
             <div className="text-xl md:text-2xl lg:text-3xl font-bold text-muted leading-tight mb-10">
-              Informatics Engineering Student at <span className="text-theme">Universitas Muhammadiyah Sidoarjo</span>, with a background in <span className="text-theme">Computer and Network Engineering</span>.
+              Informatics Engineering Student at{" "}
+              <span className="text-theme">
+                Universitas Muhammadiyah Sidoarjo
+              </span>
+              , with a background in{" "}
+              <span className="text-theme">
+                Computer and Network Engineering
+              </span>
+              .
             </div>
 
             <p className="text-base md:text-lg text-muted/80 leading-relaxed mb-10 max-w-2xl">
-              Currently, I am focused on developing my interest in Web Development, especially Front-End Development. I continue to develop my skills and intentions in the field. I am highly motivated to keep learning and developing in the ever-evolving world of technology.
+              Currently, I am focused on developing my interest in Web
+              Development, especially Front-End Development. I continue to
+              develop my skills and intentions in the field. I am highly
+              motivated to keep learning and developing in the ever-evolving
+              world of technology.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -116,7 +151,10 @@ export function AboutPage() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-3 px-6 py-3 border border-theme bg-card hover:bg-theme hover:text-accent font-bold uppercase tracking-widest text-xs transition-all"
               >
-                <IconBrandGithub size={18} className="group-hover:-rotate-12 transition-transform" />
+                <IconBrandGithub
+                  size={18}
+                  className="group-hover:-rotate-12 transition-transform"
+                />
                 GitHub <ArrowUpRight size={14} className="opacity-50" />
               </a>
               <a
@@ -125,7 +163,10 @@ export function AboutPage() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-3 px-6 py-3 border border-theme bg-card hover:bg-theme hover:text-accent font-bold uppercase tracking-widest text-xs transition-all"
               >
-                <IconBrandLinkedinFilled size={18} className="group-hover:-rotate-12 transition-transform" />
+                <IconBrandLinkedinFilled
+                  size={18}
+                  className="group-hover:-rotate-12 transition-transform"
+                />
                 LinkedIn <ArrowUpRight size={14} className="opacity-50" />
               </a>
             </div>
@@ -137,19 +178,15 @@ export function AboutPage() {
       <div className="border-y border-theme bg-card py-6 overflow-hidden relative z-10 mb-32">
         <motion.div
           animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
+          transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
           className="flex whitespace-nowrap w-max"
         >
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex items-center text-4xl md:text-5xl lg:text-7xl font-black uppercase tracking-tighter text-theme/20">
-              <span className="mx-8 hover:text-accent transition-colors duration-300">React</span>
-              <span className="mx-8 hover:text-accent transition-colors duration-300">Next.js</span>
-              <span className="mx-8 hover:text-accent transition-colors duration-300">TypeScript</span>
-              <span className="mx-8 hover:text-accent transition-colors duration-300">Node.js</span>
-              <span className="mx-8 hover:text-accent transition-colors duration-300">Python</span>
-              <span className="mx-8 hover:text-accent transition-colors duration-300">Go</span>
-              <span className="mx-8 hover:text-accent transition-colors duration-300">Docker</span>
-              <span className="mx-8 hover:text-accent transition-colors duration-300">AWS</span>
+          {technologies.map((tech, i) => (
+            <div
+              key={i}
+              className="text-theme text-2xl md:text-4xl font-black uppercase tracking-widest mx-8 md:mx-12"
+            >
+              {tech}
             </div>
           ))}
         </motion.div>
@@ -157,9 +194,8 @@ export function AboutPage() {
 
       {/* ── TIMELINE LEDGER ── */}
       <section className="max-w-7xl mx-auto px-6 md:px-12 mb-32">
-        <h2 className="text-5xl md:text-7xl font-black text-theme uppercase tracking-tighter leading-none mb-16">
-          The <br/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-amber">Archive.</span>
+        <h2 className="font-outfit border-b border-theme text-5xl md:text-7xl font-black text-theme uppercase tracking-tighter leading-none mb-16">
+          MY JOURNEY
         </h2>
 
         {renderLedger("Professional Experience", experience)}
@@ -168,7 +204,11 @@ export function AboutPage() {
       </section>
 
       {/* ── Contact CTA ── */}
-      <ContactCTA title="READY TO START?" description="Whether it's a freelance gig, a full-time role, or just a coffee chat. I'm always open to discussing new ideas." showGithub={false} />
+      <ContactCTA
+        title="READY TO START?"
+        description="Whether it's a freelance gig, a full-time role, or just a coffee chat. I'm always open to discussing new ideas."
+        showGithub={false}
+      />
     </div>
   );
 }
