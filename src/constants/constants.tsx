@@ -1,9 +1,4 @@
-import type {
-  Project,
-  TimelineItem,
-  Article,
-  Certification,
-} from "../types/types";
+import type { Project, TimelineItem, Certification } from "../types/types";
 
 export const PROJECTS: Project[] = [
   {
@@ -108,28 +103,6 @@ export const PROJECTS: Project[] = [
     category: "Coding Camp 2025",
     github: "https://github.com/sobahusn/Flower-Classification-Website",
     special: "Top 15 Best Capstone Project",
-  },
-];
-
-export const ARTICLES: Article[] = [
-  {
-    id: "a1",
-    title: "Mastering TypeScript Generics",
-    date: "Oct 12, 2023",
-    excerpt:
-      "Detailed guide on how to use generics to write more reusable and type-safe code.",
-    content:
-      "Full article content about mastering TypeScript Generics goes here...",
-    category: "TypeScript",
-  },
-  {
-    id: "a2",
-    title: "Modern State Management",
-    date: "Nov 05, 2023",
-    excerpt:
-      "A comparison between Redux, Zustand, and React Context for professional projects.",
-    content: "Full article content about modern state management goes here...",
-    category: "Architecture",
   },
 ];
 

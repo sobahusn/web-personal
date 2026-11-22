@@ -1,135 +1,151 @@
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
-import {
-  Calendar,
-  ChevronRight,
-  BookOpen,
-  ArrowLeft,
-  Clock,
-} from "lucide-react";
-import { ARTICLES } from "../constants/constants";
-import { useState } from "react";
+import { BookOpen, Search } from "lucide-react";
+import { api, errorMessage } from "../lib/api";
+import type { PostMeta } from "../types/blog";
+import { PostCard } from "../components/blog/PostCard";
 
 export function ArticlesPage() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const article = ARTICLES.find((a) => a.id === selectedId);
+  const [posts, setPosts] = useState<PostMeta[] | null>(null);
+  const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
+  const [activeTag, setActiveTag] = useState<string | null>(null);
 
-  if (selectedId && article) {
-    return (
-      <div className="pt-[68px]">
-        <div className="max-w-3xl mx-auto px-6 md:px-12 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <button
-              onClick={() => setSelectedId(null)}
-              className="flex items-center gap-2 text-muted hover:text-theme text-sm font-medium mb-10 transition-colors"
-            >
-              <ArrowLeft size={16} />
-              Back to Articles
-            </button>
+  useEffect(() => {
+    const controller = new AbortController();
+    api
+      .listPosts(false, controller.signal)
+      .then(setPosts)
+      .catch((err) => {
+        if (!controller.signal.aborted) setError(errorMessage(err));
+      });
+    return () => controller.abort();
+  }, []);
 
-            {/* Header */}
-            <div className="mb-8">
-              <div className="flex items-center gap-3 text-xs text-muted font-mono mb-4 uppercase tracking-widest">
-                <span
-                  className="px-2.5 py-1 rounded-lg font-bold text-accent text-[11px]"
-                  style={{
-                    backgroundColor:
-                      "color-mix(in srgb, var(--accent) 10%, transparent)",
-                  }}
-                >
-                  {article.category}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Calendar size={12} /> {article.date}
-                </span>
-              </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-theme leading-tight mb-4">
-                {article.title}
-              </h1>
-              <div className="w-12 h-1 rounded-full bg-accent" />
-            </div>
-
-            {/* Content */}
-            <div className="prose text-muted leading-relaxed space-y-4 text-base">
-              {article.content.split("\n").map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </div>
+  const tags = useMemo(() => {
+    const counts = new Map<string, number>();
+    posts?.forEach((p) =>
+      p.tags.forEach((t) => counts.set(t, (counts.get(t) ?? 0) + 1)),
     );
-  }
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([t]) => t);
+  }, [posts]);
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return (posts ?? []).filter(
+      (p) =>
+        (!activeTag || p.tags.includes(activeTag)) &&
+        (!q ||
+          `${p.title} ${p.excerpt} ${p.tags.join(" ")}`
+            .toLowerCase()
+            .includes(q)),
+    );
+  }, [posts, query, activeTag]);
 
   return (
     <div className="pt-[68px]">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20">
-        {/* Header */}
+      <div className="mx-auto max-w-7xl px-6 py-16 md:px-12 md:py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-12"
+          className="mb-10"
         >
           <div
             className="section-divider"
             style={{ backgroundColor: "#8b5cf6" }}
           />
-          <h1 className="text-4xl md:text-5xl font-bold text-theme mb-3 flex items-center gap-3">
+          <h1 className="mb-3 flex items-center gap-3 text-4xl font-bold text-theme md:text-5xl">
             <BookOpen size={32} className="text-purple-500" />
             Articles
           </h1>
           <p className="text-muted">Thoughts, guides & developer journal</p>
         </motion.div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {ARTICLES.map((art, i) => (
-            <motion.button
-              key={art.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              onClick={() => setSelectedId(art.id)}
-              className="group text-left bg-card rounded-2xl border border-theme p-6 hover:border-purple-400/40 hover:shadow-theme transition-all duration-300 flex flex-col h-full"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span
-                  className="text-[11px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg text-purple-500"
-                  style={{ backgroundColor: "rgba(139,92,246,0.1)" }}
-                >
-                  {art.category}
-                </span>
-                <span className="flex items-center gap-1.5 text-xs text-muted">
-                  <Calendar size={12} />
-                  {art.date}
-                </span>
+        {posts && posts.length > 0 && (
+          <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-center">
+            <label className="relative block md:w-72">
+              <span className="sr-only">Search articles</span>
+              <Search
+                size={16}
+                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
+              />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search articles"
+                className="w-full rounded-xl border border-theme bg-card py-2.5 pl-10 pr-4 text-sm text-theme placeholder:text-muted focus:border-purple-400 focus:outline-none"
+              />
+            </label>
+
+            {tags.length > 0 && (
+              <div
+                className="flex flex-wrap gap-2"
+                role="group"
+                aria-label="Filter by tag"
+              >
+                {[null, ...tags].map((tag) => (
+                  <button
+                    key={tag ?? "all"}
+                    type="button"
+                    onClick={() => setActiveTag(tag)}
+                    aria-pressed={activeTag === tag}
+                    className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                      activeTag === tag
+                        ? "border-purple-500 bg-purple-500 text-white"
+                        : "border-theme text-muted hover:border-purple-400/60 hover:text-theme"
+                    }`}
+                  >
+                    {tag ?? "All"}
+                  </button>
+                ))}
               </div>
+            )}
+          </div>
+        )}
 
-              <h3 className="font-bold text-theme text-lg mb-3 leading-snug group-hover:text-purple-500 transition-colors">
-                {art.title}
-              </h3>
-              <p className="text-muted text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
-                {art.excerpt}
-              </p>
+        {error && (
+          <p
+            role="alert"
+            className="rounded-2xl border border-theme bg-card p-6 text-sm text-muted"
+          >
+            Articles could not be loaded. {error}
+          </p>
+        )}
 
-              <div className="flex items-center justify-between pt-4 border-t border-theme">
-                <span className="flex items-center gap-1.5 text-xs text-muted">
-                  <Clock size={12} />5 min read
-                </span>
-                <span className="flex items-center gap-1 text-purple-500 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                  Read More <ChevronRight size={14} />
-                </span>
-              </div>
-            </motion.button>
-          ))}
-        </div>
+        {!posts && !error && (
+          <div
+            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+            aria-busy="true"
+            aria-label="Loading articles"
+          >
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="h-72 animate-pulse rounded-2xl border border-theme bg-card"
+              />
+            ))}
+          </div>
+        )}
 
-        {ARTICLES.length === 0 && (
-          <div className="text-center py-24">
-            <BookOpen size={40} className="text-muted mx-auto mb-4" />
-            <p className="text-muted">No articles yet. Stay tuned!</p>
+        {posts && visible.length > 0 && (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {visible.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
+          </div>
+        )}
+
+        {posts && visible.length === 0 && (
+          <div className="py-24 text-center">
+            <BookOpen size={40} className="mx-auto mb-4 text-muted" />
+            <p className="text-muted">
+              {posts.length === 0
+                ? "No articles yet. Stay tuned!"
+                : "No articles match your search."}
+            </p>
           </div>
         )}
       </div>
