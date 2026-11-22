@@ -1,8 +1,17 @@
 {
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)content'",
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+      "source": "/articles/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(facebookexternalhit|twitterbot|slackbot|whatsapp|linkedinbot|telegrambot|discordbot|pinterest|embedly|skypeuripreview).*"
+        }
+      ],
+      "destination": "/api/share?slug=:slug"
+    },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
