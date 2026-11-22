@@ -13,15 +13,6 @@ export interface Project {
   date?: string;
 }
 
-export interface Article {
-  id: string;
-  title: string;
-  date: string;
-  excerpt: string;
-  content: string;
-  category: string;
-}
-
 export interface TimelineItem {
   id: string;
   type: "experience" | "education" | "bootcamp";

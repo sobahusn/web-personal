@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @font-face {
   font-family: "Outfit Complete";
@@ -126,6 +127,12 @@
   -webkit-backdrop-filter: blur(14px) saturate(1.5);
 }
 
+@utility input-focus {
+  &:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+}
+
 @utility shadow-theme {
   box-shadow: 0 4px 24px var(--shadow);
 }
@@ -157,6 +164,7 @@
 /* Sketch Float Animations  */
 
 @keyframes sketch-float-a {
+
   0%,
   100% {
     transform: translateY(0px) rotate(0deg);
@@ -170,6 +178,7 @@
 }
 
 @keyframes sketch-float-b {
+
   0%,
   100% {
     transform: translateY(0px) rotate(0deg);
@@ -183,6 +192,7 @@
 }
 
 @keyframes sketch-float-c {
+
   0%,
   100% {
     transform: translateY(0px) rotate(0deg);
@@ -255,6 +265,7 @@
 /* Terminal Animations */
 
 @keyframes cursor-blink {
+
   0%,
   100% {
     opacity: 1;
@@ -320,4 +331,57 @@
   background: var(--accent);
   border-radius: 99px;
   margin-bottom: 1rem;
+}
+
+/* Article typography: @tailwindcss/typography wired to the site's theme tokens.
+   `.prose.prose-theme` (two classes) beats the plugin's `.prose` defaults. */
+
+.prose.prose-theme {
+  --tw-prose-body: var(--text);
+  --tw-prose-headings: var(--text);
+  --tw-prose-lead: var(--text-muted);
+  --tw-prose-links: #8b5cf6;
+  --tw-prose-bold: var(--text);
+  --tw-prose-counters: var(--text-muted);
+  --tw-prose-bullets: var(--text-muted);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--text);
+  --tw-prose-quote-borders: #8b5cf6;
+  --tw-prose-captions: var(--text-muted);
+  --tw-prose-code: var(--text);
+  --tw-prose-pre-code: #e6edf3;
+  --tw-prose-pre-bg: var(--terminal-bg);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+/* Inline code: a quiet chip instead of the plugin's literal backticks */
+.prose.prose-theme :where(code):not(:where(pre code))::before,
+.prose.prose-theme :where(code):not(:where(pre code))::after {
+  content: none;
+}
+
+.prose.prose-theme :where(code):not(:where(pre code)) {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.875em;
+}
+
+/* Code blocks: let highlight.js colours show on the theme's terminal background */
+.prose.prose-theme pre {
+  border-radius: 0.75rem;
+}
+
+.prose.prose-theme pre code.hljs {
+  background: transparent;
+  padding: 0;
+}
+
+.dark .prose.prose-theme {
+  --tw-prose-links: #a78bfa;
+  --tw-prose-quote-borders: #a78bfa;
 }

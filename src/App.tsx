@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Layout } from "./components/layout/Layout";
@@ -8,7 +9,32 @@ import { CertificationsPage } from "./pages/CertificationsPage";
 import { ArticlesPage } from "./pages/ArticlesPage";
 import { ScrollOnTop } from "./components/ScrollOnTop";
 
-function AppRoutes() {
+// The article reader pulls in the markdown + syntax-highlighting code, so it loads on demand.
+const ArticleDetailPage = lazy(() =>
+  import("./pages/ArticleDetailPage").then((m) => ({
+    default: m.ArticleDetailPage,
+  })),
+);
+
+// The admin panel (editor, toolbar, uploader) is code-split so visitors never download it.
+const RequireAuth = lazy(() =>
+  import("./components/panel/RequireAuth").then((m) => ({
+    default: m.RequireAuth,
+  })),
+);
+const LoginPage = lazy(() =>
+  import("./pages/panel/LoginPage").then((m) => ({ default: m.LoginPage })),
+);
+const DashboardPage = lazy(() =>
+  import("./pages/panel/DashboardPage").then((m) => ({
+    default: m.DashboardPage,
+  })),
+);
+const EditorPage = lazy(() =>
+  import("./pages/panel/EditorPage").then((m) => ({ default: m.EditorPage })),
+);
+
+function SiteRoutes() {
   return (
     <Layout>
       <ScrollOnTop />
@@ -19,6 +45,7 @@ function AppRoutes() {
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
         <Route path="/certificate" element={<CertificationsPage />} />
         <Route path="/articles" element={<ArticlesPage />} />
+        <Route path="/articles/:slug" element={<ArticleDetailPage />} />
 
         {/* Redirect old paths for backwards compat */}
         <Route path="/profile" element={<Navigate to="/about" replace />} />
@@ -39,7 +66,19 @@ function AppRoutes() {
 export default function App() {
   return (
     <ThemeProvider>
-      <AppRoutes />
+      <Suspense fallback={<div className="min-h-screen bg-theme" />}>
+        <Routes>
+          {/* Admin panel: rendered without the public navbar/footer */}
+          <Route path="/panel/login" element={<LoginPage />} />
+          <Route path="/panel" element={<RequireAuth />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="new" element={<EditorPage />} />
+            <Route path="edit/:slug" element={<EditorPage />} />
+          </Route>
+
+          <Route path="*" element={<SiteRoutes />} />
+        </Routes>
+      </Suspense>
     </ThemeProvider>
   );
 }
