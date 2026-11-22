@@ -28,6 +28,7 @@ export function Footer() {
                 { label: "Home", to: "/" },
                 { label: "Projects", to: "/projects" },
                 { label: "Certificates", to: "/certificate" },
+                { label: "Articles", to: "/articles" },
                 { label: "About", to: "/about" },
               ].map((link) => (
                 <Link
