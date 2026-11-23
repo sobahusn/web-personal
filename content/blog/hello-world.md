@@ -7,6 +7,4 @@ tags: []
 published: true
 ---
 
-# Hello Wold
-
 ## My First article
