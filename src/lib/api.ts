@@ -1,11 +1,24 @@
-import type { Post, PostInput, PostMeta, SaveOptions } from "../types/blog";
+import type {
+  MediaFile,
+  Post,
+  PostInput,
+  PostMeta,
+  SaveOptions,
+} from "../types/blog";
 
 export class ApiError extends Error {
   status: number;
-  constructor(status: number, message: string) {
+  /** Extra fields from the error body, e.g. `usedBy` on a blocked media delete */
+  details: Record<string, unknown>;
+  constructor(
+    status: number,
+    message: string,
+    details: Record<string, unknown> = {},
+  ) {
     super(message);
     this.name = "ApiError";
     this.status = status;
+    this.details = details;
   }
 }
 
@@ -46,13 +59,16 @@ async function request<T>(
     "application/json",
   );
   const data = isJson
-    ? ((await res.json().catch(() => null)) as { error?: string } | null)
+    ? ((await res.json().catch(() => null)) as
+        | ({ error?: string } & Record<string, unknown>)
+        | null)
     : null;
 
   if (!res.ok)
     throw new ApiError(
       res.status,
       data?.error ?? `Request failed (${res.status})`,
+      data ?? {},
     );
   if (!isJson) {
     // Plain `vite dev` has no /api and answers with index.html.
@@ -103,6 +119,19 @@ export const api = {
     }),
   logout: () =>
     request<{ ok: true }>("/api/auth/logout", { method: "POST", body: {} }),
+
+  /** Admin: every uploaded image with the posts that use it. */
+  listMedia: (signal?: AbortSignal) =>
+    request<{ files: MediaFile[] }>("/api/media", { signal }).then(
+      (r) => r.files,
+    ),
+
+  /** Admin: refuses with a 409 (details.usedBy) while posts still reference the image, unless force. */
+  deleteMedia: (name: string, force = false) =>
+    request<{ ok: true }>(
+      `/api/media?name=${encodeURIComponent(name)}${force ? "&force=1" : ""}`,
+      { method: "DELETE" },
+    ),
 
   uploadImage: (filename: string, data: string) =>
     request<{ path: string }>("/api/upload", {

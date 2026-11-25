@@ -45,3 +45,22 @@ export interface SaveOptions {
   /** Browser-local date (YYYY-MM-DD) used for `updated`, avoiding UTC off-by-one. */
   clientDate?: string;
 }
+
+/**
+ * The editor's working copy of a post: every optional field is present so
+ * inputs stay controlled. `updated` is server-controlled and never edited.
+ */
+export type PostForm = PostInput &
+  Required<Pick<PostInput, "category" | "series" | "seriesOrder" | "featured">>;
+
+/** One image in public/images/blog, as listed by GET /api/media (admin). */
+export interface MediaFile {
+  name: string;
+  /** Public path, e.g. /images/blog/1795342152373-cover.webp */
+  path: string;
+  size: number;
+  /** ISO time parsed from the upload timestamp prefix; null for hand-added files */
+  uploadedAt: string | null;
+  /** Slugs of posts (drafts included) that reference this image */
+  usedBy: string[];
+}

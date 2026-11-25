@@ -59,7 +59,8 @@ export function parseMarkdown(slug: string, raw: string): Post {
       data = {};
     }
   }
-  const content = body.replace(/^\r?\n/, "");
+  // toMarkdown ends files with one newline; drop it (and any trailing blanks) so load -> save round-trips exactly.
+  const content = body.replace(/^\r?\n/, "").trimEnd();
   const series = asText(data.series, 80);
   return {
     slug,
@@ -154,21 +155,25 @@ async function mapLimit<T, R>(
   return results;
 }
 
-/** All posts (drafts included), newest first. Callers decide what to expose. */
-export async function listPosts(): Promise<PostMeta[]> {
+/** Every post with its body (drafts included), newest first. One GitHub call per post. */
+export async function listPostsWithContent(): Promise<Post[]> {
   const entries = (await listDir(DIR)).filter(
     (e) => e.name.endsWith(".md") && SLUG_RE.test(e.name.slice(0, -3)),
   );
   const posts = await mapLimit(entries, 6, async (entry) => {
-    const slug = entry.name.slice(0, -3);
     const file = await getFile(entry.path);
-    return file ? toMeta(parseMarkdown(slug, file.content)) : null;
+    return file ? parseMarkdown(entry.name.slice(0, -3), file.content) : null;
   });
   return posts
-    .filter((p): p is PostMeta => p !== null)
+    .filter((p): p is Post => p !== null)
     .sort(
       (a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title),
     );
+}
+
+/** All posts without bodies (drafts included), newest first. Callers decide what to expose. */
+export async function listPosts(): Promise<PostMeta[]> {
+  return (await listPostsWithContent()).map(toMeta);
 }
 
 export async function savePost(

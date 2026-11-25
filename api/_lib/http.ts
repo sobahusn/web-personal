@@ -2,14 +2,24 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export class HttpError extends Error {
   status: number;
-  constructor(status: number, message: string) {
+  /** Extra JSON fields merged into the error response (e.g. which posts use an image). */
+  details?: Record<string, unknown>;
+  constructor(
+    status: number,
+    message: string,
+    details?: Record<string, unknown>,
+  ) {
     super(message);
     this.name = "HttpError";
     this.status = status;
+    this.details = details;
   }
 }
 
-export type Handler = (req: VercelRequest, res: VercelResponse) => Promise<void> | void;
+export type Handler = (
+  req: VercelRequest,
+  res: VercelResponse,
+) => Promise<void> | void;
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 export function send(res: VercelResponse, status: number, body: unknown): void {
@@ -23,10 +33,15 @@ export function noStore(res: VercelResponse): void {
 
 /** Public, CDN-cacheable for a minute, then served stale while revalidating. */
 export function cachePublic(res: VercelResponse): void {
-  res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=60, stale-while-revalidate=300",
+  );
 }
 
-export function queryString(value: string | string[] | undefined): string | undefined {
+export function queryString(
+  value: string | string[] | undefined,
+): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
@@ -51,7 +66,8 @@ export function route(handlers: Partial<Record<Method, Handler>>): Handler {
     try {
       await handler(req, res);
     } catch (err) {
-      if (err instanceof HttpError) return send(res, err.status, { error: err.message });
+      if (err instanceof HttpError)
+        return send(res, err.status, { ...err.details, error: err.message });
       console.error(err);
       return send(res, 500, { error: "Internal server error" });
     }

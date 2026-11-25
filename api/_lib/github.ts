@@ -66,6 +66,7 @@ async function request(
   method: "GET" | "PUT" | "DELETE",
   path: string,
   body?: Record<string, unknown>,
+  accept?: string,
 ): Promise<Response> {
   assertAllowedPath(path);
   const c = config();
@@ -78,6 +79,7 @@ async function request(
     method,
     headers: {
       ...authHeaders(c),
+      ...(accept ? { Accept: accept } : {}),
       ...(body ? { "Content-Type": "application/json" } : {}),
     },
     body: body ? JSON.stringify({ ...body, branch: c.branch }) : undefined,
@@ -194,6 +196,19 @@ export async function getFile(path: string): Promise<RepoFile | null> {
   return { path: data.path, sha: data.sha, content };
 }
 
+/** Raw file bytes (works for binary files and for files over the 1 MB JSON limit). */
+export async function getFileBuffer(path: string): Promise<Buffer | null> {
+  const res = await request(
+    "GET",
+    path,
+    undefined,
+    "application/vnd.github.raw+json",
+  );
+  if (res.status === 404) return null;
+  if (!res.ok) throw await githubError(res, "get file bytes");
+  return Buffer.from(await res.arrayBuffer());
+}
+
 async function getSha(path: string): Promise<string | null> {
   const res = await request("GET", path);
   if (res.status === 404) return null;
@@ -206,6 +221,7 @@ export interface DirEntry {
   name: string;
   path: string;
   sha: string;
+  size: number;
 }
 
 /** Files directly inside a folder. A folder that does not exist yet is just empty. */
@@ -223,11 +239,17 @@ export async function listDir(path: string): Promise<DirEntry[]> {
     name: string;
     path: string;
     sha: string;
+    size?: number;
   }>;
   if (!Array.isArray(data)) return [];
   return data
     .filter((e) => e.type === "file")
-    .map(({ name, path: p, sha }) => ({ name, path: p, sha }));
+    .map(({ name, path: p, sha, size }) => ({
+      name,
+      path: p,
+      sha,
+      size: size ?? 0,
+    }));
 }
 
 /**
