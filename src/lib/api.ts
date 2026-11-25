@@ -1,4 +1,4 @@
-import type { Post, PostInput, PostMeta } from "../types/blog";
+import type { Post, PostInput, PostMeta, SaveOptions } from "../types/blog";
 
 export class ApiError extends Error {
   status: number;
@@ -79,13 +79,13 @@ export const api = {
       (r) => r.post,
     ),
 
-  createPost: (input: PostInput) =>
+  createPost: (input: PostInput & SaveOptions) =>
     request<{ post: PostMeta }>("/api/posts", {
       method: "POST",
       body: input,
     }).then((r) => r.post),
 
-  updatePost: (slug: string, input: PostInput) =>
+  updatePost: (slug: string, input: PostInput & SaveOptions) =>
     request<{ post: PostMeta }>(slugUrl(slug, false), {
       method: "PUT",
       body: input,

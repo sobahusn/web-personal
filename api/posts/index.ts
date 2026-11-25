@@ -1,7 +1,14 @@
 import { requireAdmin } from "../_lib/auth.js";
-import { HttpError, cachePublic, noStore, queryString, route, send } from "../_lib/http.js";
+import {
+  HttpError,
+  cachePublic,
+  noStore,
+  queryString,
+  route,
+  send,
+} from "../_lib/http.js";
 import { listPosts, postExists, savePost, toMeta } from "../_lib/posts.js";
-import { validatePostInput } from "../_lib/validate.js";
+import { readSaveOptions, validatePostInput } from "../_lib/validate.js";
 
 export default route({
   // Public: published posts only (CDN-cached). ?scope=admin: everything, requires a session.
@@ -20,8 +27,15 @@ export default route({
     requireAdmin(req, { mutating: true });
     noStore(res);
     const input = validatePostInput(req.body);
-    if (await postExists(input.slug)) throw new HttpError(409, "An article with this slug already exists");
-    const post = await savePost(input, `content: ${input.published ? "publish" : "draft"} ${input.slug}`);
+    const { commitMessage } = readSaveOptions(req.body);
+    if (await postExists(input.slug))
+      throw new HttpError(409, "An article with this slug already exists");
+    // A brand-new post has no "last updated" yet, so `updated` stays empty.
+    const post = await savePost(
+      input,
+      commitMessage ??
+        `content: ${input.published ? "publish" : "draft"} ${input.slug}`,
+    );
     send(res, 201, { post: toMeta(post) });
   },
 });

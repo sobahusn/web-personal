@@ -385,3 +385,65 @@
   --tw-prose-links: #a78bfa;
   --tw-prose-quote-borders: #a78bfa;
 }
+
+/* Layout from article HTML: <div align="center" data-indent="2">. The values are
+   whitelisted by the sanitizer (src/lib/markdown.ts), so these are the only
+   ones that can occur. Unlayered, so they beat Tailwind utilities like mx-auto. */
+
+.prose.prose-theme [align="left"] {
+  text-align: left;
+}
+
+.prose.prose-theme [align="center"] {
+  text-align: center;
+}
+
+.prose.prose-theme [align="right"] {
+  text-align: right;
+}
+
+.prose.prose-theme [align="justify"] {
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Block images follow their wrapper's alignment instead of always centering */
+.prose.prose-theme [align="left"] img {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.prose.prose-theme [align="right"] img {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.prose.prose-theme [data-indent] {
+  --indent-step: min(2rem, 5vw);
+}
+
+.prose.prose-theme [data-indent="1"] {
+  padding-inline-start: calc(1 * var(--indent-step));
+}
+
+.prose.prose-theme [data-indent="2"] {
+  padding-inline-start: calc(2 * var(--indent-step));
+}
+
+.prose.prose-theme [data-indent="3"] {
+  padding-inline-start: calc(3 * var(--indent-step));
+}
+
+.prose.prose-theme [data-indent="4"] {
+  padding-inline-start: calc(4 * var(--indent-step));
+}
+
+.prose.prose-theme ins {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Heading anchors (ids from rehype-slug) must clear the fixed navbar */
+.prose.prose-theme :is(h2, h3, h4)[id] {
+  scroll-margin-top: 5.5rem;
+}

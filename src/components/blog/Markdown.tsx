@@ -1,10 +1,13 @@
 import { memo } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
 import { Link } from "react-router-dom";
 import "highlight.js/styles/github-dark.css";
 import { cn } from "../../lib/utils";
+import {
+  rehypePlugins,
+  remarkPlugins,
+  remarkRehypeOptions,
+} from "../../lib/markdown";
 
 interface MarkdownProps {
   children: string;
@@ -17,11 +20,14 @@ interface MarkdownProps {
 }
 
 /**
- * Raw HTML in markdown is NOT rendered (no rehype-raw), and react-markdown
- * strips unsafe URL protocols such as javascript:, so article content cannot
- * inject scripts.
+ * Renders article Markdown. A small HTML allowlist (align, data-indent, <ins>)
+ * is supported; everything else is stripped. See src/lib/markdown.ts.
  */
-export const Markdown = memo(function Markdown({ children, className, resolveSrc }: MarkdownProps) {
+export const Markdown = memo(function Markdown({
+  children,
+  className,
+  resolveSrc,
+}: MarkdownProps) {
   const components: Components = {
     img: ({ src, alt }) => (
       <img
@@ -33,10 +39,16 @@ export const Markdown = memo(function Markdown({ children, className, resolveSrc
       />
     ),
     a: ({ href, children: label }) => {
-      if (href?.startsWith("/") && !href.startsWith("//")) return <Link to={href}>{label}</Link>;
+      if (href?.startsWith("/") && !href.startsWith("//"))
+        return <Link to={href}>{label}</Link>;
       const external = /^https?:\/\//i.test(href ?? "");
       return (
-        <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+        <a
+          href={href}
+          {...(external
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
+        >
           {label}
         </a>
       );
@@ -44,10 +56,13 @@ export const Markdown = memo(function Markdown({ children, className, resolveSrc
   };
 
   return (
-    <div className={cn("prose prose-theme max-w-none prose-img:my-6", className)}>
+    <div
+      className={cn("prose prose-theme max-w-none prose-img:my-6", className)}
+    >
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[[rehypeHighlight, { detect: false, ignoreMissing: true }]]}
+        remarkPlugins={remarkPlugins}
+        remarkRehypeOptions={remarkRehypeOptions}
+        rehypePlugins={rehypePlugins}
         components={components}
       >
         {children}
