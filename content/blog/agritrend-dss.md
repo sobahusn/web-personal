@@ -4,6 +4,7 @@ date: "2026-11-24"
 updated: "2026-11-25"
 excerpt: "Decision Support System berbasis Machine Learning dan Generative AI untuk prediksi hasil panen dan analisis tren pasar komoditas pertanian."
 coverImage: "/images/blog/1795493164681-1.webp"
+category: "Bootcamp"
 tags:
   - "bootcamp"
   - "projects"
