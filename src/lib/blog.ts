@@ -24,5 +24,29 @@ export function formatDate(iso: string): string {
   const d = new Date(`${iso}T00:00:00`);
   return Number.isNaN(d.getTime())
     ? iso
-    : d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+    : d.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+}
+
+/**
+ * Images committed through the panel are not on the public site until Vercel
+ * redeploys, so editor views load them through the admin-only proxy instead.
+ * Anything else (external URLs, other paths) is returned unchanged.
+ */
+export function adminMediaUrl(src: string): string {
+  const match = /^\/images\/blog\/([A-Za-z0-9][A-Za-z0-9._-]*)$/.exec(src);
+  return match ? `/api/media/file?name=${encodeURIComponent(match[1])}` : src;
+}
+
+/** First "<base>-copy", then "-copy-2", "-copy-3"... that is not in `taken`. */
+export function uniqueCopySlug(
+  base: string,
+  taken: ReadonlySet<string>,
+): string {
+  const root = `${(base || "post").slice(0, 88).replace(/-+$/, "")}-copy`;
+  if (!taken.has(root)) return root;
+  for (let i = 2; ; i++) if (!taken.has(`${root}-${i}`)) return `${root}-${i}`;
 }

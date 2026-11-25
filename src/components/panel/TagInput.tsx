@@ -1,18 +1,33 @@
 import { useState, type KeyboardEvent } from "react";
 import { X } from "lucide-react";
-import { inputClass } from "./ui";
+import { Autocomplete } from "./Autocomplete";
 
 const MAX_TAGS = 10;
 
-export function TagInput({ value, onChange, id }: { value: string[]; onChange: (tags: string[]) => void; id?: string }) {
+interface Props {
+  value: string[];
+  onChange: (tags: string[]) => void;
+  id?: string;
+  /** Existing tags from other articles, offered as you type */
+  suggestions?: string[];
+}
+
+export function TagInput({ value, onChange, id, suggestions = [] }: Props) {
   const [draft, setDraft] = useState("");
 
   function commit(raw: string) {
-    const parts = raw.split(",").map((t) => t.trim()).filter(Boolean);
+    const parts = raw
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
     if (!parts.length) return;
     const next = [...value];
     for (const part of parts) {
-      if (next.length < MAX_TAGS && !next.some((t) => t.toLowerCase() === part.toLowerCase())) next.push(part.slice(0, 32));
+      if (
+        next.length < MAX_TAGS &&
+        !next.some((t) => t.toLowerCase() === part.toLowerCase())
+      )
+        next.push(part.slice(0, 32));
     }
     onChange(next);
     setDraft("");
@@ -27,12 +42,17 @@ export function TagInput({ value, onChange, id }: { value: string[]; onChange: (
     }
   }
 
+  const taken = new Set(value.map((t) => t.toLowerCase()));
+
   return (
     <div>
       {value.length > 0 && (
         <ul className="mb-2 flex flex-wrap gap-1.5">
           {value.map((tag) => (
-            <li key={tag} className="flex items-center gap-1 rounded-lg bg-card py-1 pl-2.5 pr-1 text-xs font-medium text-theme ring-1 ring-[color:var(--border)]">
+            <li
+              key={tag}
+              className="flex items-center gap-1 rounded-lg bg-card py-1 pl-2.5 pr-1 text-xs font-medium text-theme ring-1 ring-(--border)"
+            >
               {tag}
               <button
                 type="button"
@@ -46,15 +66,21 @@ export function TagInput({ value, onChange, id }: { value: string[]; onChange: (
           ))}
         </ul>
       )}
-      <input
+      <Autocomplete
         id={id}
         value={draft}
-        onChange={(e) => setDraft(e.target.value)}
+        onChange={setDraft}
+        onSelect={commit}
         onKeyDown={onKeyDown}
         onBlur={() => commit(draft)}
+        suggestions={suggestions.filter((t) => !taken.has(t.toLowerCase()))}
         disabled={value.length >= MAX_TAGS}
-        placeholder={value.length >= MAX_TAGS ? "Tag limit reached" : "Add a tag, then press Enter"}
-        className={inputClass}
+        maxLength={32}
+        placeholder={
+          value.length >= MAX_TAGS
+            ? "Tag limit reached"
+            : "Add a tag, then press Enter"
+        }
       />
     </div>
   );
