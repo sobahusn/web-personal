@@ -1,8 +1,9 @@
 ---
 title: "Hello World"
 date: "2026-11-23"
+updated: "2026-11-27"
 excerpt: "first article"
-coverImage: "/images/blog/1795397206662-winter-is-here.webp"
+coverImage: ""
 tags: []
 published: true
 ---
